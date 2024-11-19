@@ -13,62 +13,16 @@ jobs:
     - name: Checkout the repository
       uses: actions/checkout@v2
 
+    - name: Set up SSH key for GitHub Actions
+      uses: webfactory/ssh-agent@v0.5.3
+      with:
+        ssh-private-key: ${{ secrets.VPS_SSH_KEY }}
+
 
     - name: SSH into VPS and deploy
-      uses: appleboy/ssh-action@v0.1.0
-      with:
-        host: 62.146.229.16
-        username: pascal
-        key: -----BEGIN OPENSSH PRIVATE KEY-----
-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
------END OPENSSH PRIVATE KEY-----
-        script: |
+        run: |
+          echo "Acessing to ssh"
+          ssh ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_HOST }}
           echo "Navigating to project directory"
           cd /apps/bolt
 
