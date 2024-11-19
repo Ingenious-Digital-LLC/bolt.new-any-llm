@@ -13,8 +13,10 @@
     "test:watch": "vitest",
     "lint": "eslint --cache --cache-location ./node_modules/.cache/eslint .",
     "lint:fix": "npm run lint -- --fix",
-    "start": "bindings=$(./bindings.sh) && wrangler pages dev ./build/client $bindings",
-    "dockerstart": "bindings=$(./bindings.sh) && wrangler pages dev ./build/client $bindings --ip 0.0.0.0 --port 5173 --no-show-interactive-dev-session",
+   "start": "wrangler pages dev ./build/client --binding GROQ_API_KEY=$GROQ_API_KEY --binding HuggingFace_API_KEY=$HuggingFace_API_KEY --binding OPENAI_API_KEY=$OPENAI_API_KEY --binding ANTHROPIC_API_KEY=$ANTHROPIC_API_KEY --binding OPEN_ROUTER_API_KEY=$OPEN_ROUTER_API_KEY --binding GOOGLE_GENERATIVE_AI_API_KEY=$GOOGLE_GENERATIVE_AI_API_KEY --binding OLLAMA_API_BASE_URL=$OLLAMA_API_BASE_URL --binding VITE_LOG_LEVEL=$VITE_LOG_LEVEL --ip 0.0.0.0 --port 5173 --no-show-interactive-dev-session",
+
+    "dockerstart": "wrangler pages dev ./build/client --ip 0.0.0.0 --port 5173 --no-show-interactive-dev-session",
+
     "dockerrun": "docker run -it -d --name bolt-ai-live -p 5173:5173 --env-file .env.local bolt-ai",
     "dockerbuild:prod": "docker build -t bolt-ai:production -t bolt-ai:latest --target bolt-ai-production .",
     "dockerbuild": "docker build -t bolt-ai:development -t bolt-ai:latest --target bolt-ai-development .",

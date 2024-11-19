@@ -7,7 +7,7 @@ services:
       target: bolt-ai-production
     ports:
       - "5173:5173"
-    env_file: ".env.local"
+    env_file: ".env"
     environment:
       - NODE_ENV=production
       - COMPOSE_PROFILES=production
@@ -24,7 +24,7 @@ services:
       - RUNNING_IN_DOCKER=true
     extra_hosts:
       - "host.docker.internal:host-gateway"      
-    command: pnpm run dockerstart
+    command: pnpm run start
     profiles:
       - production  # This service only runs in the production profile
 
@@ -32,6 +32,7 @@ services:
     image: bolt-ai:development
     build:
       target: bolt-ai-development
+  
     environment:
       - NODE_ENV=development
       - VITE_HMR_PROTOCOL=ws

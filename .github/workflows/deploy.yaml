@@ -1,0 +1,39 @@
+name: Deploy Bolt.new
+
+on:
+  push:
+    branches:
+      - main  # Trigger the workflow when changes are pushed to the main branch
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout the repository
+      uses: actions/checkout@v2
+
+    - name: SSH into VPS and deploy
+      uses: appleboy/ssh-action@v0.1.0
+      with:
+        host: ${{ secrets.VPS_HOST }}
+        username: ${{ secrets.VPS_USERNAME }}
+        key: ${{ secrets.VPS_SSH_KEY }}
+        script: |
+          echo "Navigating to project directory"
+          cd /apps/bolt
+
+          echo "Pulling latest changes from main"
+          git pull origin main || { echo "Git pull failed!"; exit 1; }
+
+          echo "Stopping containers"
+          docker-compose stop || { echo "Docker stop failed!"; exit 1; }
+
+          echo "Waiting for 10 seconds"
+          sleep 10
+
+          echo "Removing containers and volumes"
+          docker-compose down -v || { echo "Docker down failed!"; exit 1; }
+
+          echo "Rebuilding and starting containers"
+          docker-compose --profile production up || { echo "Docker up failed!"; exit 1; }
