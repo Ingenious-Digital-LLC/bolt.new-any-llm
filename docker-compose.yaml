@@ -59,6 +59,6 @@ services:
         consistency: cached
       - /app/node_modules
     ports:
-      - "5173:5173"  # Same port, no conflict as only one runs at a time
+      - "5173:5173"  
     command: pnpm run dev --host 0.0.0.0
     profiles: ["development", "default"]  # Make development the default profile
