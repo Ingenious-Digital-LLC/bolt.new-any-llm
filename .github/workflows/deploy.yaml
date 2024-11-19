@@ -13,30 +13,27 @@ jobs:
     - name: Checkout the repository
       uses: actions/checkout@v2
 
-    - name: Set up SSH key for GitHub Actions
-      uses: webfactory/ssh-agent@v0.5.3
-      with:
-        ssh-private-key: ${{ secrets.VPS_SSH_KEY }}
-
-
     - name: SSH into VPS and deploy
-        run: |
-          echo "Acessing to ssh"
-          ssh ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_HOST }}
-          echo "Navigating to project directory"
+      uses: appleboy/ssh-action@v0.1.0
+      with:
+        host: ${{ secrets.VPS_HOST }}
+        username: ${{ secrets.VPS_USERNAME }}
+        key: ${{ secrets.VPS_SSH_KEY }}
+        script: |
+          # Navigate to the project directory on the VPS
           cd /apps/bolt
 
-          echo "Pulling latest changes from main"
-          git pull origin main || { echo "Git pull failed!"; exit 1; }
+          # Pull the latest changes from the repository
+          git pull origin main
 
-          echo "Stopping containers"
-          docker-compose stop || { echo "Docker stop failed!"; exit 1; }
+          # Gracefully stop the containers to allow proper shutdown
+          docker-compose stop
 
-          echo "Waiting for 10 seconds"
+          # Optional: Add a short delay (e.g., 10 seconds) to allow services to stop gracefully
           sleep 10
 
-          echo "Removing containers and volumes"
-          docker-compose down -v || { echo "Docker down failed!"; exit 1; }
+          # Now remove the containers, networks, and volumes
+          docker-compose down -v
 
-          echo "Rebuilding and starting containers"
-          docker-compose --profile production up || { echo "Docker up failed!"; exit 1; }
+          # Rebuild and start the containers in the background
+          docker-compose --profile production up -d
