@@ -26,7 +26,7 @@ services:
       - "host.docker.internal:host-gateway"      
     command: pnpm run start
     profiles:
-      - production  # This service only runs in the production profile
+      - production  # This service only runs in the production 
 
   bolt-ai-dev:
     image: bolt-ai:development
