@@ -13,11 +13,6 @@ jobs:
     - name: Checkout the repository
       uses: actions/checkout@v2
 
-    - name: Set up SSH key for GitHub Actions
-      uses: webfactory/ssh-agent@v0.5.3
-      with:
-        ssh-private-key: ${{ secrets.VPS_SSH_KEY }}
-
 
     - name: SSH into VPS and deploy
       uses: appleboy/ssh-action@v0.1.0
