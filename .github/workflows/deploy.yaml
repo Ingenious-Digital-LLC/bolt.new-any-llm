@@ -28,13 +28,13 @@ jobs:
           git pull origin main
 
           # Gracefully stop the containers to allow proper shutdown
-          docker-compose stop
+          sudo docker-compose stop
 
           # Optional: Add a short delay (e.g., 10 seconds) to allow services to stop gracefully
           sleep 10
 
           # Now remove the containers, networks, and volumes
-          docker-compose down -v
+          sudo docker-compose down -v
 
           # Rebuild and start the containers in the background
-          docker-compose --profile production up -d
+          sudo docker-compose --profile production up -d
