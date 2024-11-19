@@ -20,7 +20,7 @@ jobs:
         username: ${{ secrets.VPS_USERNAME }}
         key: ${{ secrets.VPS_SSH_KEY }}
         script: |
-          # Navigate to the project directory on the VPS
+          # Navigate to the project directory
           cd /apps/bolt
 
           # Pull the latest changes from the repository
